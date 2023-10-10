@@ -2,10 +2,6 @@
 
 int const ScalarConverter::intMax = std::numeric_limits<int>::max();
 int const ScalarConverter::intMin = std::numeric_limits<int>::min();
-float const ScalarConverter::floatMax = std::numeric_limits<float>::max();
-float const ScalarConverter::floatMin = std::numeric_limits<float>::min();
-double const ScalarConverter::doubleMax = std::numeric_limits<double>::max();
-double const ScalarConverter::doubleMin = std::numeric_limits<double>::max();
 char const ScalarConverter::charMax = std::numeric_limits<char>::max();
 char const ScalarConverter::charMin = std::numeric_limits<char>::min();
 
@@ -76,6 +72,8 @@ void ScalarConverter::_extractType(std::string const &input) {
         this->_type = DOUBLE;
     else if (this->_extractChar(input))
         this->_type = CHARACTER;
+    else if (this->_extractNonNumeric(input))
+        this->_type = NON_NUMERIC;
 }
 
 bool ScalarConverter::_extractInt(std::string const &input) {
@@ -101,6 +99,8 @@ bool ScalarConverter::_extractFloat(std::string const &input) {
         if ((input[i] == '-' || input[i] == '+') && i != 0)
             return false;
     }
+    if (input[input.length() - 1] != 'f')
+        return false;
     char *end = NULL;
     float nb;
     size_t pos;
@@ -276,9 +276,10 @@ std::ostream &operator<<(std::ostream &os, ScalarConverter const &converter) {
     else
         os << converter.getIntConversionMessage() << std::endl;
     os << "float: ";
-    os << std::fixed << std::setprecision(2) << converter.getAsFloat() << "f"
-       << std::endl;
-    os << "double: " << std::fixed << std::setprecision(2)
-       << converter.getAsDouble();
+    if (converter.getAsFloat() == static_cast<int>(converter.getAsFloat()))
+        os << converter.getAsFloat() << ".0f" << std::endl;
+    else
+        os << converter.getAsFloat() << "f" << std::endl;
+    os << "double: " << converter.getAsDouble();
     return os;
 }

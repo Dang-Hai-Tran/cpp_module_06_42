@@ -2,7 +2,7 @@
 .PHONY: all re clean fclean
 
 # Program name
-NAME	= bureaucrat
+NAME	= serializer
 
 # Compiler
 CC		= c++

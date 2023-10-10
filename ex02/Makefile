@@ -2,7 +2,7 @@
 .PHONY: all re clean fclean
 
 # Program name
-NAME	= bureaucrat
+NAME	= base
 
 # Compiler
 CC		= c++
@@ -37,7 +37,6 @@ clean:
 
 fclean: clean
 	rm -f $(NAME)
-	rm -f *_shrubbery
 
 # Remake
 re: fclean all
